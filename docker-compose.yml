@@ -1,0 +1,38 @@
+version: '3'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8000:9000"
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: Dockerfile-mariadb
+    ports:
+      - "3306:3306"
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "8080:80"
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-webserver
+    volumes:
+      - '.:/var/www/html'
+    ports:
+      - '8081:80'
+    depends_on:
+      - php
