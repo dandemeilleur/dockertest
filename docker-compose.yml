@@ -1,24 +1,20 @@
 version: '3'
 services:
-  php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/var/www/html
-    ports:
-      - "8000:9000"
 
   mariadb:
-    build:
-      context: .
-      dockerfile: Dockerfile-mariadb
+    image: library/mariadb:10.5
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=fefdeRTYY67
     ports:
       - "3306:3306"
-    restart: always
+    volumes:
+      - /c/data/docker-volumes/db-mariadb:/var/lib/mysql:rw
+    restart: "always"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306
@@ -27,12 +23,14 @@ services:
       - "8080:80"
 
   webserver:
+    container_name: webserver
     build:
       context: .
       dockerfile: Dockerfile-webserver
+    image: webserver:latest
     volumes:
-      - '.:/var/www/html'
+      - /c/Users/dlevy/Desktop/symfony-train/my_project:/var/www/html
     ports:
       - '8081:80'
     depends_on:
-      - php
+      - mariadb
