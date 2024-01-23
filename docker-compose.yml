@@ -9,8 +9,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /c/data/docker-volumes/db-mariadb:/var/lib/mysql:rw
-    restart: "always"
+      - /home/dan/docker-volumes/db-mariadb/dockertest:/var/lib/mysql:rw
+    restart: always
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -29,7 +29,7 @@ services:
       dockerfile: Dockerfile-webserver
     image: webserver:latest
     volumes:
-      - /c/Users/dlevy/Desktop/symfony-train/my_project:/var/www/html
+      - /home/dan/Desktop/dockertest:/var/www/html
     ports:
       - '8081:80'
     depends_on:

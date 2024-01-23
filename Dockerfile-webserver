@@ -4,9 +4,6 @@
 #
 ## Install composer
 #COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/composer
-#
-#COPY ./my-httpd.conf /etc/apache2/conf-available/
-#
 #RUN a2enconf my-httpd \
 #  && service apache2 restart
 #
@@ -23,6 +20,10 @@ RUN  apt-get update \
 && apt-get install -y wget \
 && rm -rf /var/lib/apt/lists/*
 
+COPY ./my-httpd.conf /etc/apache2/conf-available/
+
+RUN a2enconf my-httpd \
+  && service apache2 restart
 
 # PHP Librairies
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
